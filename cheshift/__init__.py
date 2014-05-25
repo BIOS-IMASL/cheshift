@@ -4,7 +4,7 @@ Described at PyMOL wiki: http://www.pymolwiki.org/index.php/cheshift
 
 Author : Osvaldo Martin
 email: aloctavodia@gmail.com
-Date: May 2014
+Date: June 2014
 License: GNU General Public License
 Version 3.5
 '''
@@ -41,8 +41,6 @@ def __init__(self):
 
 def validation(pdb_filename, cs_path):
     """Run the CheShift validation routine"""
-    import time
-    t1 = time.clock()
     cmd.set('suspend_updates', 'on')
     cs_exp = os.path.split(cs_path)[1]
     cs_exp_name = cs_exp.split('.')[0]
@@ -55,15 +53,11 @@ def validation(pdb_filename, cs_path):
         clean(pose)
         colorize()
     cmd.set('suspend_updates', 'off')
-    t2 = time.clock()
-    print t2 - t1
         #print '<'*80 + '\nCheShift-2 Validation Report saved at\n%s.zip\n' % details_path + '>'*80
 
 
 def prediction(pdb_filename):
     """Run the CheShift CS prediction routine"""
-    import time
-    t1 = time.clock()
     cmd.set('suspend_updates', 'on')
     pose, residues, total_residues, states = pose_from_pdb(pdb_filename)
     Db = load(path)
@@ -72,8 +66,7 @@ def prediction(pdb_filename):
     for sel in ['A', 'B', 'C', 'D']:
         cmd.delete(sel)
     cmd.set('suspend_updates', 'off')
-    t2 = time.clock()
-    print t2 - t1
+
 
 def mainDialog():
     """ Creates the GUI """
@@ -257,7 +250,7 @@ def bmrb2cheshift(cs_exp, cs_exp_name):
         fd = open('%s.ocs' % cs_exp_name, 'w')
         cs_file = open('%s' % cs_exp).readlines()
         reference = cs_file[0]
-        for line in cs_file[1:]
+        for line in cs_file[1:]:
             fd.write(line)
         fd.close()
     return reference
