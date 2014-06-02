@@ -648,6 +648,7 @@ def get_chemical_shifts(ocs_file, residues, total_residues, state, reference, Db
         if line.split()[1] == 'UNK':
             a = ['UNK', 999.00, 999.00]
             chemical_shifts.append(a)
+            res_name = residues[res_num]
             phi = get_phi(res_num, state)
             psi = get_psi(res_num, state, total_residues)
             chi1 = get_chi1(res_num, res_name, state)
@@ -926,7 +927,7 @@ def cs_2_colors(cs_exp_name, pose, residues, total_residues, states, reference, 
             elif Ca_disc_value == -0.50 or Cb_disc_value == -0.50:
                 new2_color.append(-0.50)
     for index in range(0, total_residues):
-        cmd.alter('%s and resi %s' % (pose, index), 'b=%s' % betalist_disc[index])
+        cmd.alter('%s and resi %s' % (pose, index), 'b=%s' % new2_color[index])
     cmd.save('%s_CaCb.pdb' % pose, state=0)
 
 
@@ -1009,3 +1010,5 @@ def clean(pose):
     cmd.intra_fit('%s_Cb' % pose, 0, quiet=1)
     cmd.intra_fit('%s_CaCb' % pose, 0, quiet=1)
     cmd.dss('all')
+    cmd.disable('%s_Ca' % pose)
+    cmd.disable('%s_Cb' % pose)
