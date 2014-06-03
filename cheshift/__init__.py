@@ -72,7 +72,7 @@ def mainDialog():
     """ Creates the GUI """
     master = Tk()
     master.title(' CheShift ')
-    w = Tkinter.Label(master, text='\nCheShift: Validate your protein model with PyMOl',
+    w = Tkinter.Label(master, text='\nCheShift: Validate your protein model with PyMOL',
                                 background = 'black',
                                 foreground = 'white')
     w.pack(expand=1, fill = 'both', padx=4, pady=4)
