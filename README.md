@@ -8,6 +8,6 @@ CheShift uses [data](https://github.com/aloctavodia/cheshift/tree/master/cheshif
 
 Citation
 --------
-If you find this plugin (or the information contained in this repository) usefull, please cite us.
+If you find this plugin (or the information contained in this repository) useful, please cite us.
 
 Martin O.A. Arnautova Y.A. Icazatti A.A. Scheraga H.A. and Vila J.A. A Physics-Based Method to Validate and Repair Flaws in Protein Structures. Proc Natl Acad Sci USA 2013, vol. 110 16826-16831. 
