@@ -4,9 +4,9 @@ Described at PyMOL wiki: http://www.pymolwiki.org/index.php/cheshift
 
 Author : Osvaldo Martin
 email: aloctavodia@gmail.com
-Date: June 2014
+Date: September 2014
 License: GNU General Public License
-Version 3.5
+Version 3.6
 '''
 
 import Tkinter
@@ -17,6 +17,7 @@ from pymol import cmd, stored
 import sys
 import re
 import os
+
 
 try:
     import numpy as np
@@ -39,11 +40,10 @@ def __init__(self):
                             command = lambda : mainDialog())
 
 
-def validation(pdb_filename, cs_path):
+def validation(pdb_filename, cs_exp):
     """Run the CheShift validation routine"""
     cmd.set('suspend_updates', 'on')
-    cs_exp = os.path.split(cs_path)[1]
-    cs_exp_name = cs_exp.split('.')[0]
+    cs_exp_name = os.path.basename(cs_exp).split('.')[0]
     pose, residues, total_residues, states = pose_from_pdb(pdb_filename)
     reference = bmrb2cheshift(cs_exp, cs_exp_name)
     ok, ocslist_full_new = check_seq(residues, cs_exp_name)
@@ -72,7 +72,7 @@ def mainDialog():
     """ Creates the GUI """
     master = Tk()
     master.title(' CheShift ')
-    w = Tkinter.Label(master, text='\nCheShift: Validate your protein model with PyMOL',
+    w = Tkinter.Label(master, text='\nCheShift: Validate your protein model with PyMOl',
                                 background = 'black',
                                 foreground = 'white')
     w.pack(expand=1, fill = 'both', padx=4, pady=4)
@@ -876,9 +876,15 @@ def cs_2_colors(cs_exp_name, pose, residues, total_residues, states, reference, 
                 cs_theo_ave_list.append((i/lenght))
         betalist = []
         betalist_disc = []
+        sqr_error_list = []
         for i in range(0, len(exp_list[nucleus])):
             betavalue = abs(cs_theo_ave_list[i] - exp_list[nucleus][i])
             betalist.append(betavalue)
+            if betavalue < 100:
+                sqr_error = (cs_theo_ave_list[i] - exp_list[nucleus][i])**2
+                sqr_error_list.append(sqr_error)
+        ca_rmsd = np.sqrt(np.average(sqr_error_list))
+        print 'ca_RMSD for %s = %.2f ppm' % (nucleus_name, ca_rmsd)
         for value in betalist:
             if value > 100:
                 value_disc = -2.0
@@ -1012,4 +1018,3 @@ def clean(pose):
     cmd.dss('all')
     cmd.disable('%s_Ca' % pose)
     cmd.disable('%s_Cb' % pose)
-
